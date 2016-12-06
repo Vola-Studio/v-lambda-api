@@ -1,0 +1,26 @@
+{
+  "name": "v-lambda-api",
+  "version": "0.1.0",
+  "description": "API Manager of apis.vola.xyz",
+  "main": "index.js",
+  "scripts": {
+    "run": "forever start index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Vola-Studio/v-lambda-api.git"
+  },
+  "author": "Jack Works (zjwpeter@gmail.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Vola-Studio/v-lambda-api/issues"
+  },
+  "homepage": "https://github.com/Vola-Studio/v-lambda-api#readme",
+  "dependencies": {
+    "require-without-cache": "0.0.6",
+    "routes": "^2.1.0"
+  },
+  "devDependencies": {
+    "forever": "^0.15.2"
+  }
+}
