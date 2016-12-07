@@ -42,6 +42,11 @@ var commands = {
 			else console.log('Restricted Dependencies is not on')
 		},
 		list: name => conf.restrictedDependencies.forEach(v => console.log(v))*/
+	},
+	port: i => conf.port = parseInt(i),
+	https: {
+		set: (k, c) => conf.https = {key: k, cert: c},
+		off: () => conf.https = false
 	}
 }
 
