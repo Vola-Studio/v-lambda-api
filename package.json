@@ -10,6 +10,9 @@
     "type": "git",
     "url": "git+https://github.com/Vola-Studio/v-lambda-api.git"
   },
+  "bin": {
+    "v-api": "./cli.js"
+  },
   "author": "Jack Works (zjwpeter@gmail.com)",
   "license": "MIT",
   "bugs": {
@@ -17,6 +20,7 @@
   },
   "homepage": "https://github.com/Vola-Studio/v-lambda-api#readme",
   "dependencies": {
+    "minimist": "^1.2.0",
     "require-without-cache": "0.0.6",
     "routes": "^2.1.0"
   },
