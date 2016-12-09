@@ -9,20 +9,28 @@ var buildins = require('./lib/buildin.providers.js')
 var _ = {config: require_('./config.json'),router: new Router()}
 var DI = require('./lib/DI')
 var di = DI(_.config.services)(Object.assign(_.config.providers, buildins))
-fs.watch('./config.json', () => {
-	_.config = require_('./config')
-	di = DI(_.config.services)(Object.assign(_.config.providers, buildins))
-})
+
+function reloadConfig() {
+	try {
+		_.config = require_('./config')
+		di = DI(_.config.services)(Object.assign(_.config.providers, buildins))
+	} catch (e) {
+		setTimeout(() => reloadConfig(), 1000)
+	}
+}
+fs.watch('./config.json', reloadConfig)
+
 _.router.addRoute('/:ns/*?', a => {})
 
 function execute (fn, url, req, res) {
 	var send = code => result => {
-		if (!res.statusCode) res.statusCode = code
+		//if (!res.statusCode)
+			res.statusCode = code
 		res.end(JSON.stringify(result))
 	}
 	try {
 		var result = di(fn, req, res)
-		if (result instanceof Promise) result.then(send(200), send(400))
+		if (result instanceof Promise) result.then(send(200), send(500))
 		else send(200)(result)
 	} catch (e) {
 		send(500)({error: _.config.outputErrors ? e.toString() : 'Server Internal Error'})

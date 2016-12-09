@@ -3,7 +3,7 @@
 var argv = process.argv.slice(2)
 var conf
 try {conf = JSON.parse(require('fs').readFileSync(__dirname + '/config.json'))} catch (e) {
-	conf = {restrictedDependencies: false, namespaces: {}, providers: {}, outputErrors: false}
+	conf = {restrictedDependencies: false, namespaces: {}, providers: {}, outputErrors: false, services: {}, https: false}
 }
 
 function resolve (x) {return require('path').resolve(process.cwd(), x)}
