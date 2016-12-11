@@ -23,10 +23,16 @@ fs.watch('./config.json', reloadConfig)
 _.router.addRoute('/:ns/*?', a => {})
 
 function execute (fn, url, req, res) {
-	var send = code => result => {
-		//if (!res.statusCode)
-			res.statusCode = code
-		res.end(JSON.stringify(result))
+	var cr = require('./lib/buildin.status.js').CustomResponse
+	var he = require('./lib/buildin.status.js').HTTPError
+	var send = defaultCode => result => {
+		if(result instanceof cr || result instanceof he) {
+			res.statusCode = result.code
+			res.end(result.message)
+		} else {
+			res.statusCode = defaultCode
+			res.end(JSON.stringify(result))
+		}
 	}
 	try {
 		var result = di(fn, req, res)
