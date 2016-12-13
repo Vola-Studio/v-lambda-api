@@ -5,20 +5,21 @@ var url = require('url')
 var require_ = path => require('require-without-cache')(path, require)
 var fs = require('fs')
 var buildins = require('./lib/buildin.providers.js')
+var configPath = require('application-config-path')('v-lambda-api.json')
 
-var _ = {config: require_('./config.json'),router: new Router()}
+var _ = {config: require_(configPath),router: new Router()}
 var DI = require('./lib/DI')
 var di = DI(_.config.services)(Object.assign(_.config.providers, buildins))
 
 function reloadConfig() {
 	try {
-		_.config = require_('./config')
+		_.config = require_(configPath)
 		di = DI(_.config.services)(Object.assign(_.config.providers, buildins))
 	} catch (e) {
 		setTimeout(() => reloadConfig(), 1000)
 	}
 }
-fs.watch('./config.json', reloadConfig)
+fs.watch(configPath, reloadConfig)
 
 _.router.addRoute('/:ns/*?', a => {})
 

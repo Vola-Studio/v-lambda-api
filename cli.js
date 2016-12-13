@@ -1,8 +1,10 @@
 #!/usr/bin/env node
 
 var argv = process.argv.slice(2)
+var configPath = require('application-config-path')('v-lambda-api.json')
 var conf
-try {conf = JSON.parse(require('fs').readFileSync(__dirname + '/config.json'))} catch (e) {
+try {conf = JSON.parse(require('fs').readFileSync(configPath))} catch (e) {
+	console.log('No config file found. Make some changes and we will save it.')
 	conf = {restrictedDependencies: false, namespaces: {}, providers: {}, outputErrors: false, services: {}, https: false}
 }
 
@@ -55,8 +57,11 @@ var commands = {
 		set: save((k, c) => conf.https = {key: resolve(k), cert: resolve(c)}),
 		off: save(() => conf.https = false)
 	},
-	listen: save(i => conf.listen = listen),
-	show: () => console.log(conf)
+	listen: save(i => conf.listen = i),
+	show: () => {
+		console.log('Store at: ' + configPath)
+		console.log(conf)
+	}
 }
 
 var exec = () => console.log('help')
@@ -75,6 +80,6 @@ if (argv.length) help()
 function save(fn) {
 	return (...args) => {
 		fn(...args)
-		require('fs').writeFileSync(__dirname + '/config.json', JSON.stringify(conf))
+		require('fs').writeFileSync(configPath, JSON.stringify(conf))
 	}	
 }

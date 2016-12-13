@@ -1,6 +1,6 @@
 {
   "name": "v-lambda-api",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "A light API Server frontend",
   "main": "index.js",
   "scripts": {
@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/Vola-Studio/v-lambda-api#readme",
   "dependencies": {
+    "application-config-path": "^0.1.0",
     "require-without-cache": "0.0.6",
     "routes": "^2.1.0"
   },
