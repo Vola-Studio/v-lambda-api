@@ -5,7 +5,7 @@ var url = require('url')
 var require_ = path => require('require-without-cache')(path, require)
 var fs = require('fs')
 var buildins = require('./lib/buildin.providers.js')
-var configPath = require('application-config-path')('v-lambda-api.json')
+var configPath = process.argv[2] || require('application-config-path')('v-lambda-api.json')
 
 var _ = {config: require_(configPath),router: new Router()}
 var DI = require('./lib/DI')

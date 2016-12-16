@@ -1,7 +1,12 @@
 #!/usr/bin/env node
 
 var argv = process.argv.slice(2)
-var configPath = require('application-config-path')('v-lambda-api.json')
+var configPath
+
+if(argv[0] == '-c') {
+	configPath = argv[1]
+	argv = argv.slice(2)
+} else configPath = require('application-config-path')('v-lambda-api.json')
 var conf
 try {conf = JSON.parse(require('fs').readFileSync(configPath))} catch (e) {
 	console.log('No config file found. Make some changes and we will save it.')
@@ -30,6 +35,7 @@ port portNumber,\
 https set key cert,\
 https off,\
 listen ip\
+config\
 '.split(',').forEach(h => console.log(h))
 }
 var commands = {
@@ -61,6 +67,10 @@ var commands = {
 	show: () => {
 		console.log('Store at: ' + configPath)
 		console.log(conf)
+	},
+	config: () => {
+		console.log('Config file will be stored at:')
+		console.log(configPath)
 	}
 }
 
