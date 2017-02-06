@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 
-var argv = process.argv.slice(2)
-var configPath
+let argv = process.argv.slice(2)
+let configPath
 
 if(argv[0] == '-c') {
 	configPath = argv[1]
 	argv = argv.slice(2)
 } else configPath = require('application-config-path')('v-lambda-api.json')
-var conf
+let conf
 try {conf = JSON.parse(require('fs').readFileSync(configPath))} catch (e) {
 	console.log('No config file found. Make some changes and we will save it.')
 	conf = {restrictedDependencies: false, namespaces: {}, providers: {}, outputErrors: false, services: {}, https: false}
@@ -19,7 +19,7 @@ function gen(t) {
 		mount: save((name, path) => conf[t][name] = resolve(path)),
 		unmount: save(name => conf[t][name] = undefined),
 		list: name => {
-			for(var k in conf[t]) console.log(k, ' ', conf[t][k])
+			for(let k in conf[t]) console.log(k, ' ', conf[t][k])
 		}
 	}
 }
@@ -38,7 +38,7 @@ listen ip\
 config\
 '.split(',').forEach(h => console.log(h))
 }
-var commands = {
+let commands = {
 	help: help,
 	debug: {
 		off: save(() => conf.outputErrors = false),
@@ -49,14 +49,7 @@ var commands = {
 	service: gen('services'),
 	deps: {
 		off: save(() => conf.restrictedDependencies = false),
-		on: save(() => conf.restrictedDependencies = conf.restrictedDependencies || []),
-		/*mount: name => conf.restrictedDependencies && conf.restrictedDependencies.push(name),
-		unmount: name => {
-			if (conf.restrictedDependencies)
-				conf.restrictedDependencies = conf.restrictedDependencies.filter(v => v == name)
-			else console.log('Restricted Dependencies is not on')
-		},
-		list: name => conf.restrictedDependencies.forEach(v => console.log(v))*/
+		on: save(() => conf.restrictedDependencies = conf.restrictedDependencies || [])
 	},
 	port: save(i => conf.port = parseInt(i)),
 	https: {
@@ -74,7 +67,7 @@ var commands = {
 	}
 }
 
-var exec = () => console.log('help')
+let exec = () => console.log('help')
 if (!(argv[0] in commands)) argv[0] = 'help'
 while (argv[0] in commands) {
 	if (typeof commands[argv[0]] == 'function') {

@@ -1,17 +1,17 @@
 {
   "name": "v-lambda-api",
-  "version": "0.2.4",
+  "version": "0.2.9",
   "description": "A light API Server frontend",
-  "main": "index.js",
+  "main": "./prod/index.js",
   "scripts": {
-    "run": "forever start index.js"
+    "prepublish": "tsc"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Vola-Studio/v-lambda-api.git"
   },
   "bin": {
-    "v-api": "./cli.js"
+    "v-api": "./prod/cli.js"
   },
   "author": "Jack Works (zjwpeter@gmail.com)",
   "license": "MIT",
@@ -25,6 +25,8 @@
     "routes": "^2.1.0"
   },
   "devDependencies": {
-    "forever": "^0.15.2"
+    "@types/node": "^7.0.5",
+    "@types/object-assign": "^4.0.30",
+    "typescript": "^2.1.5"
   }
 }
