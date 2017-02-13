@@ -7,7 +7,8 @@
 		"outDir": "./prod",
 		"types": [
 			"node"
-		]
+		],
+		"sourceMap": true
 	},
 	"exclude": [
 		"./node_modules"

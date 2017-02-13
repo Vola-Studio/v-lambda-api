@@ -1,5 +1,5 @@
 import { STATUS_CODES } from 'http'
-export class ExtendableError extends Error {
+export class _ExtendableError extends Error {
 	constructor(message) {
 		super(message)
 		this.name = this.constructor.name
@@ -11,8 +11,10 @@ export class ExtendableError extends Error {
 		}
 	}
 }
+export const ExtendableError = () => _ExtendableError
 
-export class HTTPError extends ExtendableError {
+export const HTTPError = () => _HTTPError
+export class _HTTPError extends _ExtendableError {
 	code: number
 	constructor(code, message?) {
 		super(message || STATUS_CODES[code])

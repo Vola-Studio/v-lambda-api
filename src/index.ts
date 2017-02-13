@@ -1,9 +1,9 @@
-import Router from 'routes'
+import Router = require('routes')
 import { createServer as httpCreateServer, ServerResponse, IncomingMessage, STATUS_CODES } from 'http'
 import { createServer as httpsCreateServer } from 'https'
 import { parse } from 'url'
 import { watch, readFileSync } from 'fs'
-import require_without_cache from 'require-without-cache'
+import require_without_cache = require('require-without-cache')
 
 import { DI } from './lib/DI'
 import * as preBuilds from './lib/buildin'
@@ -32,13 +32,16 @@ watch(configPath, reloadConfig)
 /* HTTP Server here */
 _.router.addRoute('/:ns/*?', a => {})
 
-async function executeApp (fn: Function, request: IncomingMessage, response: ServerResponse) {
-	const result = await di.resolve(fn, {request, response})
-	if (result instanceof preBuilds.ExtendableError) {
+async function executeApp (fn: Function, request: IncomingMessage, response: ServerResponse, name: string) {
+	const result = await di.resolve(fn, {request, response, _this: name})
+	if (result instanceof Error) {
 		throw result
-	} else {
+	} else if (!(result instanceof Buffer)) {
 		response.statusCode = 200
 		response.end(JSON.stringify(result))
+	} else {
+		response.statusCode = 200
+		response.end(result)
 	}
 }
 
@@ -54,17 +57,19 @@ async function onRequest(req: IncomingMessage, res: ServerResponse) {
 
 			// Support for REST
 			if(app[req.method] instanceof Function) app = app[req.method]
-			else if (!(app instanceof Function)) throw new preBuilds.HTTPError(405)
+			else if (!(app instanceof Function)) throw new preBuilds._HTTPError(405)
 			
-			await executeApp(app, req, res)
-		} else throw new preBuilds.HTTPError(502)
+			await executeApp(app, req, res, ns)
+		} else throw new preBuilds._HTTPError(502)
 	} catch(e) {
-		if(e instanceof preBuilds.HTTPError) {
+		if(e instanceof preBuilds._HTTPError) {
 			res.statusCode = e.code
-			res.end({error: e.message})
+			res.end(JSON.stringify({error: e.message}))
 		}
-		res.statusCode = 500
-		res.end({error: _.config.outputErrors ? e.toString() : STATUS_CODES[500]})
+		else {
+			res.statusCode = 500
+			res.end(JSON.stringify({error: _.config.outputErrors ? e.toString() : STATUS_CODES[500]}))
+		}
 	}
 }
 

@@ -34,7 +34,7 @@ deps [on|off],\
 port portNumber,\
 https set key cert,\
 https off,\
-listen ip\
+listen ip,\
 config\
 '.split(',').forEach(h => console.log(h))
 }

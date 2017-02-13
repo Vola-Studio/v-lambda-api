@@ -1,0 +1,1 @@
+export = (base: string) => base + " and more data from provider 2"

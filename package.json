@@ -1,10 +1,10 @@
 {
   "name": "v-lambda-api",
-  "version": "0.2.9",
+  "version": "0.3.0",
   "description": "A light API Server frontend",
   "main": "./prod/index.js",
   "scripts": {
-    "prepublish": "tsc"
+    "prepublish": "bash -c 'rm -rf prod' && tsc"
   },
   "repository": {
     "type": "git",

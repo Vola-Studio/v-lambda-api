@@ -1,5 +1,5 @@
 import { resolve } from 'path'
-import rqwc from 'require-without-cache'
+import rqwc = require('require-without-cache')
 
 const reRequire = path => rqwc(resolve(process.cwd(), path), require)
 
@@ -20,8 +20,10 @@ export class DI {
 	async resolve(fn: Function | string, preDefinedInjections: Object) {
 		let [[body, resolved], needFuther] = this.__resolveHelper(fn, preDefinedInjections)
 
-		if (needFuther)
-			return await body(...(resolved.map(dep => this.resolve(dep, preDefinedInjections))))
+		if (needFuther) {
+			let data: Array<any> = await Promise.all(resolved.map(dep => this.resolve(dep, preDefinedInjections)))
+			return await body(...data)
+		}
 		else return body
 	}
 

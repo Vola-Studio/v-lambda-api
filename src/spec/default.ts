@@ -1,0 +1,1 @@
+export = () => ({time: new Date()})
